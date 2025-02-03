@@ -1,0 +1,27 @@
+{
+  "manifest_version": 3,
+  "name": "Auto Math Solver",
+  "version": "1.0",
+  "description": "This extension solves math problems copied to the clipboard and automatically copies their solution to your clipboard.",
+  "permissions": [
+    "clipboardRead",
+    "clipboardWrite",
+    "activeTab",
+    "storage"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"]
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "48": "icon.png"
+    }
+  },
+  "icons": {
+    "48": "icon.png"
+  }
+}

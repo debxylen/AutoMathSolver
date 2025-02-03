@@ -1,0 +1,89 @@
+<!-- 
+  This file is part of the Auto Math Solver extension.
+  Copyright (C) 2025 debxylen
+  Licensed under the AGPLv3 License.
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auto Math Solver</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            color: #333;
+        }
+        h1 {
+            color: #4CAF50;
+        }
+        pre {
+            background-color: #f4f4f4;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Auto Math Solver</h1>
+    <p>This extension solves math problems copied to the clipboard and automatically copies their solution to your clipboard.</p>
+
+    <br>
+
+    <h2>Toggle Math Solver:</h2>
+    <button id="toggleButton">Enable Math Solver</button>
+    <p id="status">Currently Disabled</p>
+
+    <h2>If copy events are blocked on the page:</h2>
+    <p>Follow these steps to bypass the block and enable the copy event:</p>
+    
+    <ol>
+        <li>Open the developer console:</li>
+        <ul>
+            <li>Press <strong>Ctrl + Shift + I</strong> (Windows/Linux) or <strong>Cmd + Option + I</strong> (Mac).</li>
+            <li>Go to the <strong>Console</strong> tab.</li>
+        </ul>
+
+        <li>Paste this code into the console:</li>
+        <pre>
+setInterval(() => {
+    (function() {
+        const originalStop = Event.prototype.stopImmediatePropagation;
+
+        Event.prototype.stopImmediatePropagation = function() {
+            if (this.type === "copy") {
+                console.log("Bypassed copy event block!");
+                return;
+            }
+            originalStop.apply(this, arguments);
+        };
+    })();
+}, 1000);
+        </pre>
+
+        <li>Press <strong>Enter</strong> to run it.</li>
+    </ol>
+
+    <p>This should allow the extension to work on the page.</p>
+
+    <script src="popup.js"></script>
+</body>
+</html>
