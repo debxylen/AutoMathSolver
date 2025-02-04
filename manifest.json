@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Auto Math Solver",
+  "name": "mathsolver.ext",
   "version": "1.0",
-  "description": "This extension solves math problems copied to the clipboard and automatically copies their solution to your clipboard.",
+  "description": "This extension solves math problems copied to the clipboard and copies their solution to your clipboard.",
   "permissions": [
     "clipboardRead",
     "clipboardWrite",
