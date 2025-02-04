@@ -52,7 +52,9 @@
     <button id="toggleButton">Enable Math Solver</button>
     <p id="status">Currently Disabled</p>
 
-    <h2>If copy events are blocked on the page:</h2>
+    <button id="injectButton">Inject Copy-Block Bypass Script</button>
+
+    <h2>If copy events are blocked on the page and the bypass script didn't work:</h2>
     <p>Follow these steps to bypass the block and enable the copy event:</p>
     
     <ol>
@@ -64,19 +66,17 @@
 
         <li>Paste this code into the console:</li>
         <pre>
-setInterval(() => {
-    (function() {
-        const originalStop = Event.prototype.stopImmediatePropagation;
+(function() {
+    const msxtoriginalStop = Event.prototype.stopImmediatePropagation;
 
-        Event.prototype.stopImmediatePropagation = function() {
-            if (this.type === "copy") {
-                console.log("Bypassed copy event block!");
-                return;
-            }
-            originalStop.apply(this, arguments);
-        };
-    })();
-}, 1000);
+    Event.prototype.stopImmediatePropagation = function() {
+        if (this.type === "copy") {
+            console.log("Bypassed copy event block!");
+            return;
+        }
+        msxtoriginalStop.apply(this, arguments);
+    };
+})();
         </pre>
 
         <li>Press <strong>Enter</strong> to run it.</li>

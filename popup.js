@@ -4,6 +4,33 @@
 * Licensed under the AGPLv3 License.
 */
 
+function showToast(message, bg) {
+        let toast = document.createElement("div");
+        toast.innerText = message;
+        toast.style.position = "fixed";
+        toast.style.bottom = "20px";
+        toast.style.left = "50%";
+        toast.style.transform = "translateX(-50%)";
+        toast.style.background = bg;
+        toast.style.color = "#fff";
+        toast.style.padding = "10px 20px";
+        toast.style.borderRadius = "5px";
+        toast.style.boxShadow = "0px 0px 10px rgba(0,0,0,0.2)";
+        toast.style.zIndex = "9999";
+        toast.style.fontSize = "14px";
+        toast.style.fontWeight = "bold";
+
+        document.body.appendChild(toast);
+
+        setTimeout(() => {
+            toast.style.transition = "opacity 0.5s";
+            toast.style.opacity = "0";
+            setTimeout(() => {
+                toast.remove();
+            }, 500);
+        }, 2000);
+}
+
 // Initialize the toggle button state when the popup is opened
 document.addEventListener('DOMContentLoaded', async () => {
     const toggleButton = document.getElementById('toggleButton');
@@ -52,3 +79,52 @@ async function setToggleState(state) {
         chrome.storage.sync.set({ mathSolverEnabled: state }, resolve);
     });
 }
+
+// Listen for messages from the content script (injected script)
+chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+    if (request.type === "showToast") {
+        showToast(request.message, request.color);
+    }
+});
+
+function injectScript(tabId) {
+    // Inject script directly in the context of the tab
+    chrome.scripting.executeScript({
+        target: { tabId: tabId },
+        func: function() {
+            // Create the script element within the page context
+            const script = document.createElement('script');
+            script.src = chrome.runtime.getURL('bypass.js');
+            
+            // Handle loading and errors
+            script.onload = function() {
+                chrome.runtime.sendMessage({
+                type: "showToast",
+                message: "Bypassed copy event block!",
+                color: "#4CAF50"
+                });
+            };
+            script.onerror = function() {
+                chrome.runtime.sendMessage({
+                type: "showToast",
+                message: "Failed to load bypass script.",
+                color: "#D40000"
+                });
+            };
+            
+            // Append the script to the body of the document
+            document.body.appendChild(script);
+        }
+    });
+}
+
+// Button click event handler
+document.getElementById('injectButton').addEventListener('click', function() {
+    try {
+        chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
+            injectScript(tabs[0].id);
+        });
+    } catch (error) {
+        showToast(error, "#D40000");
+    }
+});
