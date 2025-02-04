@@ -1,5 +1,5 @@
 /* 
-* This file is part of the Auto Math Solver extension.
+* This file is part of mathsolver.ext
 * Copyright (C) 2025 debxylen
 * Licensed under the AGPLv3 License.
 */
