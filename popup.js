@@ -100,18 +100,19 @@ function injectScript(tabId) {
             script.onload = function() {
                 chrome.runtime.sendMessage({
                 type: "showToast",
-                message: "Bypassed copy event block!",
+                message: "Injected copy-block bypass script!",
                 color: "#4CAF50"
                 });
             };
-            script.onerror = function() {
+
+            script.onerror = (event) => {
                 chrome.runtime.sendMessage({
-                type: "showToast",
-                message: "Failed to load bypass script.",
-                color: "#D40000"
+                    type: "showToast",
+                    message: `Failed to inject bypass script: ${event.message || 'Unknown Error'}`,
+                    color: "#D40000"
                 });
             };
-            
+
             // Append the script to the body of the document
             document.body.appendChild(script);
         }
